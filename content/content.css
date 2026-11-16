@@ -1,0 +1,523 @@
+/*
+ * Watchlist — styles injected into youtube.com.
+ * Everything is namespaced with `ytwl-` and nothing here touches YouTube's own elements,
+ * apart from `.ytwl-rel`, which gives an unpositioned thumbnail a positioning context.
+ */
+
+.ytwl-btn,
+.ytwl-pill,
+.ytwl-toast-root {
+  --ytwl-brand: #5840ba;
+  --ytwl-brand-hi: #6b52cf;
+  --ytwl-brand-soft: #b6a8f0;
+
+  /* Springs, sampled into linear() so they run on the compositor.
+     smooth = critically damped (no overshoot); bounce = damping 0.72, for moments with momentum. */
+  --ytwl-smooth: linear(0, .0576, .1806, .3213, .4558, .5736, .6717, .7507, .8127, .8606, .897, .9243, .9447, .9598, .9709, .979, .9849, .9892, .9923, .9945, .9961, .9972, .998, .9986, 1);
+  --ytwl-snappy: linear(0, .079, .2366, .4038, .5518, .672, .7646, .8336, .8838, .9196, .9448, .9624, .9745, .9828, .9885, .9923, .9949, .9966, .9977, .9985, 1);
+  --ytwl-bounce: linear(0, .0343, .1194, .2328, .3579, .4827, .5993, .703, .7913, .8636, .9207, .964, .9951, 1.0163, 1.0293, 1.0361, 1.0384, 1.0374, 1.0343, 1.0301, 1.0253, 1.0205, 1.016, 1.0119, 1.0084, 1.0056, 1.0033, 1.0016, 1.0003, .9995, .9989, .9986, .9985, .9986, .9987, .9988, 1);
+}
+
+.ytwl-rel {
+  position: relative;
+}
+
+/* ---------------------------------------------------------------------------
+ * Shared icon pair: bookmark-plus <-> bookmark-check
+ * ------------------------------------------------------------------------- */
+.ytwl-ico {
+  position: relative;
+  display: block;
+  flex: none;
+  width: 18px;
+  height: 18px;
+}
+
+.ytwl-ico svg {
+  position: absolute;
+  inset: 0;
+  display: block;
+  width: 100%;
+  height: 100%;
+  fill: none;
+  stroke: currentColor;
+  transition: opacity 0.16s ease, transform 0.64s var(--ytwl-bounce);
+}
+
+.ytwl-ico .ytwl-i-done {
+  opacity: 0;
+  transform: scale(0.4) rotate(-14deg);
+}
+
+[data-saved] > .ytwl-ico .ytwl-i-add {
+  opacity: 0;
+  transform: scale(0.4) rotate(14deg);
+}
+
+[data-saved] > .ytwl-ico .ytwl-i-done {
+  opacity: 1;
+  transform: none;
+}
+
+/* ---------------------------------------------------------------------------
+ * Thumbnail button
+ * ------------------------------------------------------------------------- */
+.ytwl-btn {
+  position: absolute;
+  top: 8px;
+  left: 8px;
+  z-index: 20;
+  display: inline-flex;
+  align-items: center;
+  box-sizing: border-box;
+  height: 32px;
+  min-width: 32px;
+  margin: 0;
+  padding: 0 7px;
+  border: 0;
+  border-radius: 16px;
+  outline: 0;
+  color: #fff;
+  background: rgba(20, 16, 36, 0.62);
+  -webkit-backdrop-filter: blur(14px) saturate(170%);
+  backdrop-filter: blur(14px) saturate(170%);
+  box-shadow: inset 0 0 0 1px rgba(255, 255, 255, 0.16), 0 2px 10px rgba(0, 0, 0, 0.3);
+  font: 500 12px/1 Roboto, Arial, sans-serif;
+  letter-spacing: 0.01em;
+  text-transform: none;
+  white-space: nowrap;
+  cursor: pointer;
+  user-select: none;
+  -webkit-tap-highlight-color: transparent;
+
+  /* Resting state: out of the way until the thumbnail is hovered. */
+  opacity: 0;
+  pointer-events: none;
+  transform: scale(0.8);
+  transform-origin: 16px 50%;
+  transition:
+    opacity 0.16s ease,
+    transform 0.37s var(--ytwl-snappy),
+    background-color 0.2s ease,
+    box-shadow 0.2s ease;
+}
+
+.ytwl-anchor:hover .ytwl-btn,
+.ytwl-card:hover .ytwl-btn,
+.ytwl-btn:focus-visible,
+.ytwl-btn[data-saved],
+.ytwl-btn[data-pop] {
+  opacity: 1;
+  pointer-events: auto;
+  transform: none;
+}
+
+/* The twin inside YouTube's hover preview: already "open", so it simply takes over in place. */
+.ytwl-btn-preview {
+  transform: none;
+  transition:
+    opacity 0.12s ease,
+    transform 0.37s var(--ytwl-snappy),
+    background-color 0.2s ease,
+    box-shadow 0.2s ease;
+}
+
+ytd-video-preview:hover > .ytwl-btn-preview,
+ytd-video-preview.ytdVideoPreviewActive > .ytwl-btn-preview {
+  opacity: 1;
+  pointer-events: auto;
+}
+
+.ytwl-btn[hidden] {
+  display: none;
+}
+
+.ytwl-btn:hover {
+  background: var(--ytwl-brand);
+  box-shadow: inset 0 0 0 1px rgba(255, 255, 255, 0.2), 0 4px 16px rgba(88, 64, 186, 0.45);
+}
+
+.ytwl-btn[data-saved] {
+  background: var(--ytwl-brand);
+  box-shadow: inset 0 0 0 1px rgba(255, 255, 255, 0.22), 0 2px 10px rgba(0, 0, 0, 0.3);
+}
+
+.ytwl-btn[data-saved]:hover {
+  background: var(--ytwl-brand-hi);
+}
+
+.ytwl-btn:focus-visible {
+  box-shadow: 0 0 0 2px #fff, 0 0 0 4px var(--ytwl-brand);
+}
+
+/* Feedback lands on the press, not the release. */
+.ytwl-anchor:hover .ytwl-btn:active,
+.ytwl-card:hover .ytwl-btn:active,
+.ytwl-btn:active {
+  transform: scale(0.9);
+  transition-duration: 0.16s, 0.09s, 0.2s, 0.2s;
+}
+
+/* The label unrolls to its natural width: an fr track animates where `width: auto` cannot. */
+.ytwl-label {
+  display: grid;
+  grid-template-columns: 0fr;
+  opacity: 0;
+  transition: grid-template-columns 0.37s var(--ytwl-snappy), opacity 0.18s ease;
+}
+
+.ytwl-label-in {
+  min-width: 0;
+  overflow: hidden;
+}
+
+.ytwl-label-in::after {
+  content: 'Watch later';
+  display: block;
+  padding: 0 5px 0 6px;
+}
+
+.ytwl-btn[data-saved] .ytwl-label-in::after {
+  content: 'Saved';
+}
+
+.ytwl-btn:hover .ytwl-label,
+.ytwl-btn:focus-visible .ytwl-label {
+  grid-template-columns: 1fr;
+  opacity: 1;
+}
+
+/* The moment of saving: a springy settle and a ring that carries the tap outward. */
+.ytwl-btn[data-pop] {
+  animation: ytwl-pop 0.64s var(--ytwl-bounce);
+}
+
+.ytwl-btn::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  border: 2px solid var(--ytwl-brand-soft);
+  border-radius: inherit;
+  opacity: 0;
+  pointer-events: none;
+}
+
+.ytwl-btn[data-pop='save']::after {
+  animation: ytwl-ring 0.6s cubic-bezier(0.2, 0.7, 0.3, 1);
+}
+
+@keyframes ytwl-pop {
+  from {
+    transform: scale(0.84);
+  }
+  to {
+    transform: scale(1);
+  }
+}
+
+@keyframes ytwl-ring {
+  from {
+    opacity: 0.85;
+    transform: scale(1);
+  }
+  to {
+    opacity: 0;
+    transform: scale(1.55);
+  }
+}
+
+/* Compact thumbnails: the watch-page sidebar and the playlist panel. */
+#secondary .ytwl-btn,
+ytd-playlist-panel-renderer .ytwl-btn,
+ytd-compact-video-renderer .ytwl-btn {
+  top: 5px;
+  left: 5px;
+  height: 26px;
+  min-width: 26px;
+  padding: 0 5px;
+  border-radius: 13px;
+  font-size: 11px;
+  transform-origin: 13px 50%;
+}
+
+#secondary .ytwl-btn .ytwl-ico,
+ytd-playlist-panel-renderer .ytwl-btn .ytwl-ico,
+ytd-compact-video-renderer .ytwl-btn .ytwl-ico {
+  width: 16px;
+  height: 16px;
+}
+
+/* ---------------------------------------------------------------------------
+ * Watch page pill
+ * ------------------------------------------------------------------------- */
+.ytwl-pill {
+  display: inline-flex;
+  flex: none;
+  align-items: center;
+  gap: 6px;
+  box-sizing: border-box;
+  height: 36px;
+  margin: 0 0 0 8px;
+  padding: 0 16px 0 12px;
+  border: 0;
+  border-radius: 18px;
+  outline: 0;
+  color: #4a35a0;
+  background: rgba(88, 64, 186, 0.12);
+  font: 500 14px/36px Roboto, Arial, sans-serif;
+  letter-spacing: 0;
+  text-transform: none;
+  white-space: nowrap;
+  cursor: pointer;
+  user-select: none;
+  -webkit-tap-highlight-color: transparent;
+  transition:
+    transform 0.37s var(--ytwl-snappy),
+    background-color 0.2s ease,
+    color 0.2s ease,
+    box-shadow 0.2s ease;
+}
+
+.ytwl-pill:hover {
+  background: rgba(88, 64, 186, 0.2);
+}
+
+html[dark] .ytwl-pill {
+  color: #d3caff;
+  background: rgba(150, 130, 235, 0.22);
+}
+
+html[dark] .ytwl-pill:hover {
+  background: rgba(150, 130, 235, 0.32);
+}
+
+.ytwl-pill[data-saved],
+html[dark] .ytwl-pill[data-saved] {
+  color: #fff;
+  background: var(--ytwl-brand);
+}
+
+.ytwl-pill[data-saved]:hover,
+html[dark] .ytwl-pill[data-saved]:hover {
+  background: var(--ytwl-brand-hi);
+}
+
+.ytwl-pill:active {
+  transform: scale(0.95);
+  transition-duration: 0.09s, 0.2s, 0.2s, 0.2s;
+}
+
+.ytwl-pill:focus-visible {
+  box-shadow: 0 0 0 2px #fff, 0 0 0 4px var(--ytwl-brand);
+}
+
+.ytwl-pill[data-pop] {
+  animation: ytwl-pop 0.64s var(--ytwl-bounce);
+}
+
+.ytwl-pill-text {
+  display: inline-block;
+  overflow: hidden;
+}
+
+/* Fallback placement (Shorts, or a watch-page layout the pill could not attach to). */
+.ytwl-pill-floating,
+html[dark] .ytwl-pill-floating {
+  position: fixed;
+  right: 24px;
+  bottom: 24px;
+  z-index: 2200;
+  height: 44px;
+  margin: 0;
+  padding: 0 18px 0 14px;
+  border-radius: 22px;
+  color: #fff;
+  background: rgba(24, 20, 40, 0.74);
+  -webkit-backdrop-filter: blur(24px) saturate(180%);
+  backdrop-filter: blur(24px) saturate(180%);
+  box-shadow:
+    inset 0 0 0 1px rgba(255, 255, 255, 0.12),
+    inset 0 1px 0 rgba(255, 255, 255, 0.14),
+    0 12px 36px rgba(0, 0, 0, 0.32);
+  line-height: 44px;
+}
+
+.ytwl-pill-floating:hover,
+html[dark] .ytwl-pill-floating:hover {
+  background: var(--ytwl-brand);
+}
+
+/* ---------------------------------------------------------------------------
+ * Toast
+ * ------------------------------------------------------------------------- */
+.ytwl-toast-root {
+  position: fixed;
+  right: 0;
+  bottom: 28px;
+  left: 0;
+  z-index: 2147483000;
+  display: flex;
+  justify-content: center;
+  pointer-events: none;
+}
+
+.ytwl-toast {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  box-sizing: border-box;
+  height: 46px;
+  max-width: calc(100vw - 32px);
+  padding: 0 7px 0 8px;
+  border-radius: 23px;
+  color: #fff;
+  background: rgba(24, 20, 40, 0.76);
+  -webkit-backdrop-filter: blur(28px) saturate(180%);
+  backdrop-filter: blur(28px) saturate(180%);
+  box-shadow:
+    inset 0 0 0 1px rgba(255, 255, 255, 0.1),
+    inset 0 1px 0 rgba(255, 255, 255, 0.16),
+    0 16px 44px rgba(0, 0, 0, 0.34),
+    0 2px 8px rgba(0, 0, 0, 0.2);
+  font: 500 14px/1 Roboto, Arial, sans-serif;
+  letter-spacing: 0.005em;
+  pointer-events: auto;
+
+  /* Arrives from below and leaves the same way; blur + scale make it materialise rather than fade. */
+  opacity: 0;
+  filter: blur(8px);
+  transform: translateY(28px) scale(0.92);
+  transition:
+    opacity 0.22s ease,
+    filter 0.3s ease,
+    transform 0.52s var(--ytwl-smooth);
+}
+
+.ytwl-toast[data-show] {
+  opacity: 1;
+  filter: none;
+  transform: none;
+}
+
+.ytwl-toast[data-plain] {
+  padding-right: 18px;
+}
+
+.ytwl-toast-ico {
+  display: grid;
+  flex: none;
+  place-items: center;
+  width: 30px;
+  height: 30px;
+  border-radius: 50%;
+  background: var(--ytwl-brand);
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.25);
+}
+
+.ytwl-toast[data-tone='muted'] .ytwl-toast-ico {
+  background: rgba(255, 255, 255, 0.16);
+}
+
+.ytwl-toast-ico svg {
+  display: block;
+  width: 16px;
+  height: 16px;
+  fill: none;
+  stroke: currentColor;
+}
+
+.ytwl-toast-text {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.ytwl-toast-action {
+  flex: none;
+  box-sizing: border-box;
+  height: 32px;
+  margin: 0 0 0 4px;
+  padding: 0 14px;
+  border: 0;
+  border-radius: 16px;
+  outline: 0;
+  color: #fff;
+  background: rgba(255, 255, 255, 0.16);
+  font: 600 13px/32px Roboto, Arial, sans-serif;
+  cursor: pointer;
+  transition: background-color 0.18s ease, transform 0.37s var(--ytwl-snappy);
+}
+
+.ytwl-toast-action:hover {
+  background: rgba(255, 255, 255, 0.26);
+}
+
+.ytwl-toast-action:active {
+  transform: scale(0.94);
+  transition-duration: 0.18s, 0.09s;
+}
+
+.ytwl-toast-action:focus-visible {
+  box-shadow: 0 0 0 2px var(--ytwl-brand-soft);
+}
+
+/* ---------------------------------------------------------------------------
+ * Accessibility preferences
+ * ------------------------------------------------------------------------- */
+@media (prefers-reduced-motion: reduce) {
+  .ytwl-btn,
+  .ytwl-pill,
+  .ytwl-toast,
+  .ytwl-toast-action,
+  .ytwl-label,
+  .ytwl-ico svg {
+    transition-property: opacity, background-color, color, box-shadow;
+    transition-duration: 0.15s;
+    animation: none !important;
+  }
+
+  .ytwl-btn,
+  .ytwl-btn:active,
+  .ytwl-pill:active,
+  .ytwl-toast,
+  .ytwl-ico svg {
+    filter: none;
+    transform: none !important;
+  }
+
+  .ytwl-btn::after {
+    display: none;
+  }
+}
+
+@media (prefers-reduced-transparency: reduce) {
+  .ytwl-btn,
+  .ytwl-toast,
+  .ytwl-pill-floating {
+    -webkit-backdrop-filter: none;
+    backdrop-filter: none;
+  }
+
+  .ytwl-btn:not([data-saved]):not(:hover) {
+    background: #17132a;
+  }
+
+  .ytwl-toast,
+  .ytwl-pill-floating {
+    background: #17132a;
+  }
+}
+
+@media (prefers-contrast: more) {
+  .ytwl-btn,
+  .ytwl-toast,
+  .ytwl-pill-floating {
+    background: #0d0a1a;
+    box-shadow: 0 0 0 2px #fff;
+  }
+
+  .ytwl-btn[data-saved],
+  .ytwl-pill[data-saved] {
+    background: #3d2d82;
+  }
+}

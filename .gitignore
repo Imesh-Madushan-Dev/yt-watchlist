@@ -1,0 +1,21 @@
+# Packed extension and its private signing key.
+# The .pem is a secret: anyone who has it can publish updates as this extension.
+*.pem
+*.crx
+*.zip
+
+# Dependencies and tooling output (the extension itself has no build step)
+node_modules/
+dist/
+
+# Editor and OS files
+.vscode/
+.idea/
+.DS_Store
+Thumbs.db
+desktop.ini
+
+# Local environment and logs
+.env
+.env.*
+*.log

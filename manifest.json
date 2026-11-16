@@ -1,0 +1,48 @@
+{
+  "manifest_version": 3,
+  "name": "Watchlist — Save YouTube videos for later",
+  "short_name": "Watchlist",
+  "version": "1.0.0",
+  "description": "Save any YouTube video with one click and keep your watch-later queue in a side panel that stays with you as you browse.",
+  "minimum_chrome_version": "116",
+  "icons": {
+    "16": "icons/icon16.png",
+    "32": "icons/icon32.png",
+    "48": "icons/icon48.png",
+    "128": "icons/icon128.png"
+  },
+  "action": {
+    "default_title": "Open Watchlist",
+    "default_icon": {
+      "16": "icons/icon16.png",
+      "32": "icons/icon32.png",
+      "48": "icons/icon48.png"
+    }
+  },
+  "side_panel": {
+    "default_path": "sidepanel/index.html"
+  },
+  "background": {
+    "service_worker": "background.js"
+  },
+  "permissions": ["storage", "sidePanel", "contextMenus", "scripting"],
+  "host_permissions": ["https://www.youtube.com/*"],
+  "content_scripts": [
+    {
+      "matches": ["https://www.youtube.com/*"],
+      "js": ["shared/core.js", "content/content.js"],
+      "css": ["content/content.css"],
+      "run_at": "document_idle"
+    }
+  ],
+  "commands": {
+    "_execute_action": {
+      "suggested_key": { "default": "Alt+Shift+W" },
+      "description": "Open or close the Watchlist side panel"
+    },
+    "save-current-video": {
+      "suggested_key": { "default": "Alt+Shift+S" },
+      "description": "Save the video in the current tab"
+    }
+  }
+}
