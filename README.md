@@ -71,20 +71,25 @@
 
 ## Installation
 
-Watchlist is loaded as an unpacked extension. Nothing needs to be compiled.
+Nothing needs to be compiled. Download a release, or load the source directly.
 
-1. Get the code:
+### From a release
 
-   ```sh
-   git clone https://github.com/Imesh-Madushan-Dev/yt-watchlist.git
-   ```
-
-   Or choose **Code → Download ZIP** on GitHub and extract it.
-
+1. Download `watchlist-1.0.0.zip` from the [latest release](https://github.com/Imesh-Madushan-Dev/yt-watchlist/releases/latest) and extract it.
 2. Open `chrome://extensions` (in Edge, `edge://extensions`).
 3. Turn on **Developer mode**.
-4. Click **Load unpacked** and select the `yt-watchlist` folder.
+4. Click **Load unpacked** and select the extracted `watchlist` folder.
 5. Pin **Watchlist** to the toolbar.
+
+Each release also includes a packed `watchlist-1.0.0.crx`. Chrome on Windows and macOS only installs `.crx` files that come from the Chrome Web Store, so use the zip there. Where the browser allows it, such as Chrome on Linux, drag the `.crx` onto `chrome://extensions` with Developer mode on.
+
+### From source
+
+```sh
+git clone https://github.com/Imesh-Madushan-Dev/yt-watchlist.git
+```
+
+Then follow steps 2 to 5 above, selecting the `yt-watchlist` folder.
 
 If the buttons do not appear on a YouTube tab that was already open, reload that tab.
 
