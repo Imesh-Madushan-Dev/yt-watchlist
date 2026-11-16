@@ -13,6 +13,7 @@
   <img src="https://img.shields.io/badge/Manifest-V3-5840ba" alt="Manifest V3">
   <img src="https://img.shields.io/badge/Chromium-116%2B-5840ba" alt="Chromium 116 or newer">
   <img src="https://img.shields.io/badge/build%20step-none-5840ba" alt="No build step">
+  <a href="LICENSE"><img src="https://img.shields.io/badge/license-MIT-5840ba" alt="MIT license"></a>
 </p>
 
 <p align="center">
@@ -30,6 +31,7 @@
 - [Permissions and privacy](#permissions-and-privacy)
 - [Browser support](#browser-support)
 - [Third-party software](#third-party-software)
+- [License](#license)
 
 ## Features
 
@@ -154,6 +156,7 @@ vendor/                    Third-party libraries, shipped with the extension
 tools/
   make-icons.mjs           Renders the PNG icons from the SVG sources
 docs/                      Images used in this README
+LICENSE                    MIT License
 ```
 
 ## Development
@@ -219,6 +222,12 @@ Chrome, Edge, Brave and other Chromium-based browsers, version 116 or newer. Fir
 | [htm](https://github.com/developit/htm) | 3.1.1 | Apache-2.0 |
 
 The videos shown in the screenshots are from the Blender and Blender Studio YouTube channels and are © Blender Foundation. Its [open movies](https://studio.blender.org/films/) are published under Creative Commons licences.
+
+## License
+
+Watchlist is released under the [MIT License](LICENSE).
+
+The libraries in `vendor/` are not covered by it. Each remains under its own licence, listed in the table above.
 
 ---
 
